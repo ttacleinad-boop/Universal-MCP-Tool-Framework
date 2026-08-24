@@ -138,3 +138,26 @@ python -m unittest discover -s tests -p "test_*.py"
 ```
 
 The test suite verifies discovery, default read access, write/execute denial by default, scope enforcement, structured errors, status output, and JSON configuration.
+
+## Universal Project Scaffolding Toolkit
+
+The repository also provides `umcp-scaffold`, a controlled generator for repeatable Python project starts.
+
+| Project template | Generated capability |
+|---|---|
+| `python-library` | Installable `src/` package, unit-test starter, development/production configuration, setup scripts, documentation, project state, and Git initialization. |
+| `mcp-tool` | Everything in `python-library`, plus a standard MCP server entry point and the pinned MCP SDK dependency. |
+
+Create a fully initialized project. By default, the generator creates a local Git repository, creates an isolated `.venv`, installs local dependencies, and validates the generated project.
+
+```bash
+umcp-scaffold create "My Project" ./my-project --type mcp-tool
+```
+
+Validate a generated project later:
+
+```bash
+umcp-scaffold validate ./my-project
+```
+
+Every generated project receives `.project-state.json` with its schema version, name, package name, template type, lifecycle state, Git/dependency flags, creation time, and last validation state. The generator rejects non-empty target directories rather than overwriting a project.

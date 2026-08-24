@@ -16,6 +16,9 @@ dependencies = [
   "mcp==2.0.0"
 ]
 
+[project.scripts]
+umcp-scaffold = "universal_mcp.scaffold:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
