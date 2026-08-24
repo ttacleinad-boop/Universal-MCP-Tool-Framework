@@ -1,0 +1,5 @@
+{
+  "server_name": "Universal MCP Tool Framework",
+  "enabled_modes": ["read"],
+  "log_level": "INFO"
+}
