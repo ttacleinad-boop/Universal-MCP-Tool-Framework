@@ -161,3 +161,25 @@ umcp-scaffold validate ./my-project
 ```
 
 Every generated project receives `.project-state.json` with its schema version, name, package name, template type, lifecycle state, Git/dependency flags, creation time, and last validation state. The generator rejects non-empty target directories rather than overwriting a project.
+
+## Local Code Analysis and Testing Toolkit
+
+`umcp-quality` inspects a local Python project and returns a machine-readable quality report with `PASS`, `FAIL`, and `WARNING` results.
+
+```bash
+umcp-quality ./my-project
+umcp-quality ./my-project --format markdown
+```
+
+| Check | Outcome |
+|---|---|
+| Static code analysis | Parses every Python source file and reports syntax errors. |
+| Dependency analysis | Verifies `pyproject.toml` metadata and reports whether a project virtual environment exists. |
+| Error detection | Captures syntax, configuration, test, and source-compilation failures in the report. |
+| Test discovery and execution | Discovers `tests/test_*.py` and runs the standard library test runner. |
+| Build verification | Compiles `src/` without writing project changes. |
+| Configuration validation | Validates JSON files under `config/`. |
+| Regression/diff reporting | Uses Git status to flag uncommitted changes; no Git mutation is performed. |
+| Health/status report | Returns aggregate counts and an overall PASS, FAIL, or WARNING. |
+
+`FAIL` produces a non-zero command exit status. `WARNING` indicates an incomplete but non-failing condition, such as no virtual environment, no tests, no configuration directory, or unavailable Git history.
