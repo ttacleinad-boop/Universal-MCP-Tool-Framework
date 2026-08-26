@@ -74,6 +74,20 @@ Start the server with a selected configuration file:
 UNIVERSAL_MCP_CONFIG=config.json mcp run server.py
 ```
 
+## Secret & Configuration Manager
+
+Project 15 provides a strict local policy for keeping secret values out of source code and configuration files. `SecretConfigManager` validates environment-scoped public configuration, declared secret names, and explicitly permitted targets (`build` or `deployment`). Secret values are supplied only at injection time by the caller; the manager does not read process environment variables, referenced files, or external stores.
+
+```python
+from universal_mcp import SecretConfigManager
+
+manager = SecretConfigManager.from_json("secret-policy.json")
+environment = manager.inject("testing", "build", {"API_TOKEN": runtime_token})
+redacted = manager.redacted_status("testing", "build")
+```
+
+The manager rejects unknown fields, unsupported environments, invalid variable names, public/secret name collisions, unsorted or duplicate lists, disallowed targets, missing or unknown secret names, and empty secret values. `redacted_status()` reports counts and fixed safety facts without returning secret names or values. This is a local policy and injection primitive; it does not deploy, contact production, activate scheduling, or retrieve secrets from an external vault.
+
 ## Add a Tool
 
 1. Choose one operation mode.
