@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from types import MappingProxyType
-from typing import Mapping
 
 _ENVIRONMENTS = frozenset({"development", "testing", "production"})
 _TARGETS = frozenset({"build", "deployment"})
@@ -27,7 +27,7 @@ class EnvironmentPolicy:
     allowed_targets: tuple[str, ...]
 
     @classmethod
-    def from_mapping(cls, environment: str, raw: object) -> "EnvironmentPolicy":
+    def from_mapping(cls, environment: str, raw: object) -> EnvironmentPolicy:
         if not isinstance(raw, dict) or set(raw) != {"public", "secret_names", "allowed_targets"}:
             raise SecretConfigError(f"{environment} policy has unsupported or missing fields")
 
@@ -76,7 +76,7 @@ class SecretConfigManager:
     environments: Mapping[str, EnvironmentPolicy]
 
     @classmethod
-    def from_mapping(cls, raw: object) -> "SecretConfigManager":
+    def from_mapping(cls, raw: object) -> SecretConfigManager:
         if not isinstance(raw, dict) or set(raw) != {"environments"}:
             raise SecretConfigError("secret configuration has unsupported or missing fields")
         environments = raw["environments"]
@@ -92,7 +92,7 @@ class SecretConfigManager:
         return cls(environments=MappingProxyType(policies))
 
     @classmethod
-    def from_json(cls, path: str | Path) -> "SecretConfigManager":
+    def from_json(cls, path: str | Path) -> SecretConfigManager:
         try:
             with Path(path).open("r", encoding="utf-8") as handle:
                 raw = json.load(handle)

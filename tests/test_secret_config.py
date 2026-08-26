@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from typing import cast
 
 from universal_mcp.secret_config import SecretConfigError, SecretConfigManager
 
@@ -66,9 +67,9 @@ class SecretConfigManagerTests(unittest.TestCase):
 
     def test_secret_names_cannot_be_public(self) -> None:
         invalid = _policy()
-        environments = invalid["environments"]
+        environments = cast(dict[str, object], invalid["environments"])
         self.assertIsInstance(environments, dict)
-        development = environments["development"]
+        development = cast(dict[str, object], environments["development"])
         self.assertIsInstance(development, dict)
         development["public"] = {"API_TOKEN": "never-inline-secrets"}
         with self.assertRaisesRegex(SecretConfigError, "exposes a secret name"):
