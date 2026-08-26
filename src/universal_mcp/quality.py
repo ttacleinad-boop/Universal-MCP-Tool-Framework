@@ -7,8 +7,8 @@ import os
 import shutil
 import subprocess
 import sys
-from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -187,7 +187,7 @@ def run_quality_checks(project_root: str | Path) -> dict[str, Any]:
     counts = {status.value: sum(result.status == status for result in report) for status in CheckStatus}
     return {
         "project_root": str(root),
-        "generated_utc": datetime.now(UTC).isoformat(),
+        "generated_utc": datetime.now(timezone.utc).isoformat(),
         "overall_status": overall.value,
         "summary": counts,
         "checks": [result.as_dict() for result in report],

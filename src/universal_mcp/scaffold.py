@@ -7,10 +7,9 @@ import re
 import subprocess
 import sys
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-
 
 PROJECT_TYPES = {"python-library", "mcp-tool"}
 REQUIRED_DIRECTORIES = ("src", "tests", "config", "scripts", "docs")
@@ -253,7 +252,7 @@ def scaffold_project(
         "package_name": package_name,
         "project_type": project_type,
         "lifecycle_state": "initialized",
-        "created_utc": datetime.now(UTC).isoformat(),
+        "created_utc": datetime.now(timezone.utc).isoformat(),
     }
     files = {
         "README.md": _readme(project_name, project_type),

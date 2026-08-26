@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from .config import FrameworkConfig
@@ -27,7 +27,7 @@ class ToolRuntime:
         return {
             "status": "ok",
             "service": self.config.server_name,
-            "timestamp": datetime.now(UTC).isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
     def status(self) -> dict[str, Any]:

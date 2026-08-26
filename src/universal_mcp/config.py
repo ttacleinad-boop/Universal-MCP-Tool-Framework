@@ -16,7 +16,7 @@ class FrameworkConfig:
     log_level: str = "INFO"
 
     @classmethod
-    def from_mapping(cls, raw: dict[str, object]) -> "FrameworkConfig":
+    def from_mapping(cls, raw: dict[str, object]) -> FrameworkConfig:
         modes = raw.get("enabled_modes", [OperationMode.READ.value])
         if not isinstance(modes, list) or not all(isinstance(mode, str) for mode in modes):
             raise ValueError("enabled_modes must be a list of mode names")
@@ -35,5 +35,5 @@ def load_config(path: str | Path | None = None) -> FrameworkConfig:
     with config_path.open("r", encoding="utf-8") as handle:
         raw = json.load(handle)
     if not isinstance(raw, dict):
-        raise ValueError("framework configuration must be a JSON object")
+        raise TypeError("framework configuration must be a JSON object")
     return FrameworkConfig.from_mapping(raw)

@@ -36,6 +36,7 @@ class ToolFrameworkTests(unittest.TestCase):
             ExecutionContext(scopes=frozenset({"notes:write"})),
         )
         self.assertFalse(result.ok)
+        assert result.error is not None
         self.assertEqual(result.error["code"], "permission_denied")
 
     def test_execute_mode_requires_mode_and_scope(self) -> None:
@@ -44,6 +45,7 @@ class ToolFrameworkTests(unittest.TestCase):
         )
         runtime = ToolRuntime(self.registry, config)
         denied = runtime.execute("example_run_check", {"target": "unit"})
+        assert denied.error is not None
         self.assertEqual(denied.error["code"], "permission_denied")
 
         allowed = runtime.execute(
@@ -57,6 +59,7 @@ class ToolFrameworkTests(unittest.TestCase):
     def test_unknown_tool_returns_structured_error(self) -> None:
         result = self.runtime.execute("not_registered")
         self.assertFalse(result.ok)
+        assert result.error is not None
         self.assertEqual(result.error["code"], "tool_not_found")
 
     def test_status_is_machine_readable(self) -> None:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 
 from .models import OperationMode
 from .registry import ToolRegistry
@@ -15,7 +15,7 @@ def register_example_tools(registry: ToolRegistry) -> None:
         mode=OperationMode.READ,
     )
     def example_get_time() -> dict[str, str]:
-        return {"utc": datetime.now(UTC).isoformat()}
+        return {"utc": datetime.now(timezone.utc).isoformat()}
 
     @registry.register(
         name="example_write_note",
